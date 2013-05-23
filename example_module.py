@@ -12,7 +12,7 @@ import ircbot
 @ircbot.register
 @action(events=('JOIN', ))
 def greeting(bot, message, *args, **kwargs):
-    """Greet a joining person.""" # Help for the function (it is required)
+    """Greet a joining person."""  # Help for the function (it is required)
 
     # Get the persons nick
     nick = message.nick
@@ -22,6 +22,7 @@ def greeting(bot, message, *args, **kwargs):
 
     # Greet the person on the given channel
     bot.say('Welcome {}!'.format(nick), channel)
+
 
 # RegExp rule for function execution, name is a aditional parameter
 # defining the function human-readable name (displayed in help messages)
@@ -56,7 +57,7 @@ class ClassModuleExample(MultiAction):
     def niSayersShallBeRemebered(self, bot, message, *args, **kwargs):
         """Remember users who said Ni! or ni!"""
 
-        # At the user who matched the rule to the list
+        # Add the user who matched the rule to the list
         if not message.nick in bot.usersWhoSaidNi:
             bot.usersWhoSaidNi.append(message.nick)
 

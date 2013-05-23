@@ -8,6 +8,15 @@ from action import MultiAction, action
 import ircbot
 
 
+def userPresent(bot, user, channel):
+    """Return true if user is present on the channel, else false."""
+
+    if channel in bot.userlists and user in bot.userlists[channel]:
+        return True
+    else:
+        return False
+
+
 class UserLists(MultiAction):
     """Managind the channel userlists for the bot."""
 
@@ -23,8 +32,7 @@ class UserLists(MultiAction):
             msg = message._parameters.split()
 
             if len(msg) == 3 and msg[-1].startswith('#'):
-                bot.userlists[msg[-1]] = [u
-                        for u in message._trailing.split()]
+                bot.userlists[msg[-1]] = [u for u in message._trailing.split()]
 
     @action(name='populate_userlist', events=('JOIN', ))
     def populate_userlists(self, bot, message, match, *args, **kwargs):
