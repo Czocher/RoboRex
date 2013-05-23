@@ -66,17 +66,25 @@ class IRCBot(asyncore.dispatcher):
         """Execute when there is data on the socket
         ready for a read operation."""
         try:
-            try:
-                self._inbuf += self.recv(512).decode('utf-8')
-            except UnicodeDecodeError:
-                self._inbuf += self.recv(512).decode('latin2')
-            except:
-                pass
-        except BlockingIOError:
+            self._inbuf += self.recv(512).decode('utf-8')
+        except UnicodeDecodeError:
+            self._inbuf += self.recv(512).decode('latin2')
+        except:
             pass
 
         # Process the data
         self.process_data()
+
+    def handle_error(self):
+        """Reconnect on error."""
+
+        asyncore.dispatcher.handle_error(self)
+
+        if self.config.VERBOSE:
+            print('Connection lost, reconnecting...')
+
+        self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connect((self.host, self.port))
 
     def _send(self, data):
         """Add the data to the output buffer."""
