@@ -118,16 +118,19 @@ class IRCBot(asyncore.dispatcher):
                 self._send('PONG {}'.format(trailing))
                 continue
 
-            for action in self._actions:
-                match = None
-                if trailing and action.rule:
-                    pattern = action.rule.replace('$botnick', self.nick)
-                    match = re.search(pattern, trailing,
-                                      re.LOCALE | re.UNICODE)
+            self.perform_actions(prefix, command, parameters, trailing)
 
-                if match or command in action.events:
-                    action(self, Message(prefix, command, parameters,
-                                         trailing), match)
+    def perform_actions(self, prefix, command, parameters, trailing):
+        """Perform all matching actions."""
+        for action in self._actions:
+            match = None
+            if trailing and action.rule:
+                pattern = action.rule.replace('$botnick', self.nick)
+                match = re.search(pattern, trailing, re.LOCALE | re.UNICODE)
+
+            if match or command in action.events:
+                action(self, Message(prefix, command, parameters, trailing),
+                       match)
 
     def writable(self):
         """Return True if there is data to be sent by the socket
