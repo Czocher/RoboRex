@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python3
 """
 ignore.py -- A simple IRC bot module
 Copyright 2013, Paweł Jan Czochański

@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python3
 """
 userlists.py -- A simple IRC bot module
 Copyright 2013, Paweł Jan Czochański
@@ -11,14 +11,11 @@ import ircbot
 def userPresent(bot, user, channel):
     """Return true if user is present on the channel, else false."""
 
-    if channel in bot.userlists and user in bot.userlists[channel]:
-        return True
-    else:
-        return False
+    return channel in bot.userlists and user in bot.userlists[channel]
 
 
 class UserLists(MultiAction):
-    """Managind the channel userlists for the bot."""
+    """Managing the channel userlists for the bot."""
 
     def __init__(self, bot, *args, **kwargs):
         bot.userlists = {channel: [] for channel in bot.channels}

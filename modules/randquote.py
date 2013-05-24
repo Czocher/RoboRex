@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python3
 """
 randquote.py -- A simple IRC bot module
 Copyright 2013, Paweł Jan Czochański
@@ -10,6 +10,7 @@ from admin import admin_only
 import random
 import ircbot
 import sqlite3
+
 
 class RandQuote(MultiAction):
     """Throw a random quote from the database at the given moment."""
@@ -59,10 +60,11 @@ class RandQuote(MultiAction):
         nick = message.nick
         msg = message.content
 
-        if (random.randint(1, 100) <= self.throwprob\
-            or (bot.nick in msg and self.namereact) or \
-            ('bot' in msg and self.botreact)) and not (msg.startswith('!') or \
-            nick == bot.nick):
+        if (random.randint(1, 100) <= self.throwprob or
+            (bot.nick in msg and self.namereact) or
+            (message.channel == bot.nick) or
+            ('bot' in msg and self.botreact)) and not \
+           (msg.startswith('!') or nick == bot.nick):
 
             self.cursor.execute("""SELECT quote FROM Quotes
             ORDER BY RANDOM() LIMIT 1""")
@@ -100,8 +102,8 @@ class RandQuote(MultiAction):
             bot.say('Changed the quote gather probability'
                     ' to {}.'.format(self.gatherprob), message.channel)
         else:
-            bot.say('Current gather probability is {}.'.format(self.gatherprob),
-                    message.channel)
+            bot.say('Current gather probability is {}.'
+                    .format(self.gatherprob), message.channel)
 
 
 ircbot.register(RandQuote)
