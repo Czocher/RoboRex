@@ -10,7 +10,8 @@ import ircbot
 
 def userPresent(bot, user, channel):
     """Return true if user is present on the channel, else false."""
-
+    if not channel.startswith('#'):
+        return True
     return channel in bot.userlists and user in bot.userlists[channel]
 
 
