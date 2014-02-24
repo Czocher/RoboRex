@@ -65,10 +65,18 @@ class IRCBot(asyncore.dispatcher):
     def handle_read(self):
         """Execute when there is data on the socket
         ready for a read operation."""
+
+        buf = b''
+
         try:
-            self._inbuf += self.recv(512).decode('utf-8')
+            buf = self.recv(512)
+        except BlockingIOError:
+            pass
+
+        try:
+            self._inbuf += buf.decode('utf-8')
         except UnicodeDecodeError:
-            self._inbuf += self.recv(512).decode('latin2')
+            self._inbuf += buf.decode('latin2')
         except:
             pass
 
